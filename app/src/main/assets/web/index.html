@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#090d16" />
+  <title>Likhon AI - Mobile Chatbot</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dark-theme">
+  <div id="app" class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1>Likhon AI</h1>
+          <span class="status-indicator"><span class="dot"></span> Gemini Flash • বাংলা ও English</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="newChatBtn" class="icon-btn" title="New Chat" aria-label="New Chat">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+        <button id="clearChatBtn" class="icon-btn" title="Clear Chat" aria-label="Clear Chat">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+        <button id="apiKeySettingsBtn" class="icon-btn" title="API Key Settings" aria-label="Settings">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 2l-2 2m-1.5 1.5L14 9m0 0l-3-3m3 3l-6 6a5 5 0 0 1-7-7l6-6m3 3l3 3"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Chat Messages Container -->
+    <main id="chatMessages" class="chat-messages" role="log" aria-live="polite">
+      <!-- Welcome Empty State -->
+      <div id="welcomeContainer" class="welcome-container">
+        <div class="welcome-badge">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+            <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
+          </svg>
+        </div>
+        <h2>Welcome to Likhon AI</h2>
+        <p>Lightweight, fast, and mobile-friendly AI assistant. Ask questions in Bangla or English!</p>
+        <div class="quick-prompts">
+          <button class="prompt-chip" data-prompt="বাংলায় একটি সুন্দর মোটিভেশনাল উক্তি দাও">
+            বাংলায় মোটিভেশনাল উক্তি
+          </button>
+          <button class="prompt-chip" data-prompt="Explain how AI works in simple terms">
+            Explain AI simply
+          </button>
+          <button class="prompt-chip" data-prompt="বাংলাদেশের সেরা ৫টি দর্শনীয় স্থান কী কী?">
+            বাংলাদেশের দর্শনীয় স্থান
+          </button>
+          <button class="prompt-chip" data-prompt="How to save battery on Samsung A17?">
+            Samsung A17 Battery Tips
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Input Bar -->
+    <footer class="chat-input-bar">
+      <div class="input-wrapper">
+        <textarea
+          id="userInput"
+          placeholder="Message Likhon AI... (Shift+Enter for newline)"
+          rows="1"
+          autocomplete="off"
+        ></textarea>
+        <button id="sendBtn" class="send-btn" aria-label="Send Message" disabled>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+          </svg>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- API Key Modal -->
+  <div id="apiKeyModal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Gemini API Configuration</h3>
+        <button id="closeModalBtn" class="close-btn" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">
+          Enter your Google Gemini API key to enable responses. Get a key for free at
+          <a href="https://aistudio.google.com/" target="_blank" rel="noopener">Google AI Studio</a>.
+        </p>
+        <div class="input-group">
+          <label for="apiKeyInput">Gemini API Key</label>
+          <input type="password" id="apiKeyInput" placeholder="AIzaSy..." />
+        </div>
+        <div class="security-note">
+          🔒 <strong>Security Note:</strong> Your API key is stored only inside your browser's private localStorage and is never transmitted to third parties.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="saveApiKeyBtn" class="btn primary-btn">Save Key</button>
+        <button id="cancelModalBtn" class="btn secondary-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal for Clear Chat -->
+  <div id="clearConfirmModal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Clear Chat History?</h3>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete all messages? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button id="confirmClearBtn" class="btn danger-btn">Clear All</button>
+        <button id="cancelClearBtn" class="btn secondary-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden">Copied to clipboard</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
